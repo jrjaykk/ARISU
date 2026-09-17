@@ -6,7 +6,7 @@ const chatBox = document.getElementById("chatBox");
 const clearChatBtn = document.getElementById("clearChatBtn");
 
 // 👇 YAHAN APNA RENDER URL PASTE KARNA HAI
-const BACKEND_URL = "https://YOUR-ARISU-URL.onrender.com";
+const BACKEND_URL = "https://arisu-29rh.onrender.com";
 
 function speak(text) {
     const speech = new SpeechSynthesisUtterance(text);
