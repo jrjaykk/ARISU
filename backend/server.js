@@ -104,5 +104,5 @@ const server = http.createServer(async (req, res) => {
 
 
 server.listen(PORT, () => {
-    console.log(ARISU backend running on port ${PORT});
+   console.log(`ARISU backend running on port ${PORT}`);
 });
