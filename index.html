@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ARISU | Advanced Intelligent System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>ARISU</h1>
+            <p>ADVANCED INTELLIGENT SYSTEM</p>
+        </header>
+
+        <div class="system-status">
+            <span class="status-light"></span>
+            <span id="status">SYSTEM ONLINE</span>
+        </div>
+
+        <div class="reactor">
+            <div class="reactor-ring">
+                <div class="reactor-core">A</div>
+            </div>
+        </div>
+
+        <div class="response-box">
+            <div class="label">ARISU</div>
+
+            <p id="response">
+                Hello. I am ARISU.<br>
+                How may I assist you?
+            </p>
+        </div>
+
+        <div class="command-area">
+
+            <input
+                type="text"
+                id="commandInput"
+                placeholder="Type a command..."
+                autocomplete="off"
+            >
+
+            <button id="sendBtn">SEND</button>
+
+        </div>
+
+        <button id="micBtn" class="mic-button">
+            🎤
+        </button>
+
+        <p class="mic-text">Click microphone to speak</p>
+
+        <footer>
+            ARISU v1.0 • Personal AI Assistant
+        </footer>
+
+    </div>
+
+    <script src="commands.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
