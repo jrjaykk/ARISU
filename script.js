@@ -28,10 +28,10 @@ function addMessage(sender, text) {
         message.className = "message user-message";
     }
 
-    message.innerHTML = 
-        <div class="message-name">${sender}</div>
-        <div class="message-text">${text}</div>
-    ;
+  message.innerHTML = `
+    <div class="message-name">${sender}</div>
+    <div class="message-text">${text}</div>
+`;
 
     chatBox.appendChild(message);
     chatBox.scrollTop = chatBox.scrollHeight;
