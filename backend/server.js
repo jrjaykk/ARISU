@@ -10,11 +10,11 @@ const client = new OpenAI({
 const server = http.createServer(async (req, res) => {
 
     // CORS
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Origin", "https://jryaykk.github.io");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    // OPTIONS
+    // Preflight request
     if (req.method === "OPTIONS") {
         res.writeHead(204);
         res.end();
@@ -42,11 +42,11 @@ const server = http.createServer(async (req, res) => {
 
         let body = "";
 
-        req.on("data", chunk => {
+        req.on("data", function(chunk) {
             body += chunk;
         });
 
-        req.on("end", async () => {
+        req.on("end", async function() {
 
             try {
 
@@ -54,6 +54,7 @@ const server = http.createServer(async (req, res) => {
                 const userMessage = data.message;
 
                 if (!userMessage) {
+
                     res.writeHead(400, {
                         "Content-Type": "application/json"
                     });
@@ -84,7 +85,7 @@ const server = http.createServer(async (req, res) => {
 
             } catch (error) {
 
-                console.error(error);
+                console.error("OPENAI ERROR:", error);
 
                 res.writeHead(500, {
                     "Content-Type": "application/json"
@@ -110,6 +111,6 @@ const server = http.createServer(async (req, res) => {
     }));
 });
 
-server.listen(PORT, () => {
-    console.log(`ARISU backend running on port ${PORT}`);
+server.listen(PORT, function() {
+    console.log("ARISU backend running on port " + PORT);
 });
