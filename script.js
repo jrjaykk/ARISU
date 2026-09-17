@@ -1,110 +1,138 @@
-const input =
-    document.getElementById("commandInput");
-
-const sendBtn =
-    document.getElementById("sendBtn");
-
-const micBtn =
-    document.getElementById("micBtn");
-
-const response =
-    document.getElementById("response");
-
-const status =
-    document.getElementById("status");
+const input = document.getElementById("commandInput");
+const sendBtn = document.getElementById("sendBtn");
+const micBtn = document.getElementById("micBtn");
+const status = document.getElementById("status");
+const chatBox = document.getElementById("chatBox");
+const clearChatBtn = document.getElementById("clearChatBtn");
 
 
-// ==========================
-// ARISU VOICE
-// ==========================
+/* =========================
+   VOICE OUTPUT
+   ========================= */
 
 function speak(text) {
-
-    const speech =
-        new SpeechSynthesisUtterance(text);
+    const speech = new SpeechSynthesisUtterance(text);
 
     speech.rate = 0.95;
     speech.pitch = 0.85;
     speech.volume = 1;
 
     window.speechSynthesis.cancel();
-
     window.speechSynthesis.speak(speech);
 }
 
 
-// ==========================
-// RUN COMMAND
-// ==========================
+/* =========================
+   ADD MESSAGE
+   ========================= */
 
-function runCommand() {
+function addMessage(sender, text) {
 
-    const command =
-        input.value.trim();
+    const message = document.createElement("div");
 
-    if (command === "") {
-        return;
+    if (sender === "ARISU") {
+        message.className = "message arisu-message";
+    } else {
+        message.className = "message user-message";
     }
 
+    message.innerHTML = 
+        <div class="message-name">${sender}</div>
+        <div class="message-text">${text}</div>
+    ;
 
-    status.innerText =
-        "PROCESSING...";
+    chatBox.appendChild(message);
 
-
-    const answer =
-        processCommand(command);
-
-
-    response.innerText =
-        answer;
-
-
-    speak(answer);
-
-
-    input.value = "";
-
-
-    setTimeout(() => {
-
-        status.innerText =
-            "SYSTEM ONLINE";
-
-    }, 1000);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 
-// ==========================
-// SEND BUTTON
-// ==========================
+/* =========================
+   RUN COMMAND
+   ========================= */
 
-sendBtn.addEventListener(
-    "click",
-    runCommand
-);
+function runCommand() {
+
+    const command = input.value.trim();
+
+    if (command === "") return;
+
+    status.innerText = "PROCESSING...";
 
 
-// ==========================
-// ENTER KEY
-// ==========================
+    // User message
+    addMessage("YOU", command);
 
-input.addEventListener(
-    "keydown",
-    function(event) {
 
-        if (event.key === "Enter") {
+    // Get ARISU response
+    const answer = processCommand(command);
 
-            runCommand();
 
-        }
+    // ARISU response
+    setTimeout(() => {
 
+        addMessage("ARISU", answer);
+
+        speak(answer);
+
+        status.innerText = "SYSTEM ONLINE";
+
+    }, 400);
+
+
+    input.value = "";
+}
+
+
+/* =========================
+   SEND BUTTON
+   ========================= */
+
+sendBtn.addEventListener("click", runCommand);
+
+
+/* =========================
+   ENTER KEY
+   ========================= */
+
+input.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        runCommand();
     }
-);
+
+});
 
 
-// ==========================
-// VOICE RECOGNITION
-// ==========================
+/* =========================
+   CLEAR CHAT
+   ========================= */
+
+clearChatBtn.addEventListener("click", function() {
+
+    chatBox.innerHTML = 
+        <div class="message arisu-message">
+
+            <div class="message-name">
+                ARISU
+            </div>
+
+            <div class="message-text">
+                Chat cleared.<br>
+                How may I assist you?
+            </div>
+
+        </div>
+    ;
+
+    speak("Chat cleared. How may I assist you?");
+
+});
+
+
+/* =========================
+   VOICE RECOGNITION
+   ========================= */
 
 const SpeechRecognition =
     window.SpeechRecognition ||
@@ -113,97 +141,69 @@ const SpeechRecognition =
 
 if (SpeechRecognition) {
 
-    const recognition =
-        new SpeechRecognition();
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
 
 
-    recognition.lang =
-        "en-IN";
+    micBtn.addEventListener("click", function() {
+
+        status.innerText = "LISTENING...";
+
+        micBtn.innerText = "🔴";
+
+        recognition.start();
+
+    });
 
 
-    recognition.continuous =
-        false;
+    recognition.onresult = function(event) {
+
+        const command =
+            event.results[0][0].transcript;
+
+        input.value = command;
+
+        runCommand();
+
+    };
 
 
-    recognition.interimResults =
-        false;
+    recognition.onerror = function() {
+
+        status.innerText = "MIC ERROR";
+
+        addMessage(
+            "ARISU",
+            "I could not hear you. Please try again."
+        );
+
+        micBtn.innerText = "🎤";
+
+    };
 
 
-    // MIC CLICK
+    recognition.onend = function() {
 
-    micBtn.addEventListener(
-        "click",
-        function() {
+        micBtn.innerText = "🎤";
 
-            status.innerText =
-                "LISTENING...";
+        setTimeout(() => {
 
-            micBtn.innerText =
-                "🔴";
+            status.innerText = "SYSTEM ONLINE";
 
-            recognition.start();
+        }, 500);
 
-        }
-    );
-
-
-    // RESULT
-
-    recognition.onresult =
-        function(event) {
-
-            const command =
-                event.results[0][0]
-                .transcript;
-
-
-            input.value =
-                command;
-
-
-            runCommand();
-
-        };
-
-
-    // ERROR
-
-    recognition.onerror =
-        function() {
-
-            status.innerText =
-                "MIC ERROR";
-
-            response.innerText =
-                "I could not hear you. Please try again.";
-
-            micBtn.innerText =
-                "🎤";
-
-        };
-
-
-    // END
-
-    recognition.onend =
-        function() {
-
-            micBtn.innerText =
-                "🎤";
-
-            setTimeout(() => {
-
-                status.innerText =
-                    "SYSTEM ONLINE";
-
-            }, 500);
-
-        };
+    };
 
 } else {
 
     micBtn.disabled = true;
 
-    response.innerText =
-        "Voice recognition is not supported in this browser.";
+    addMessage(
+        "ARISU",
+        "Voice recognition is not supported in this browser."
+    );
+
 }
