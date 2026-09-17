@@ -10,7 +10,7 @@ const client = new OpenAI({
 const server = http.createServer(async (req, res) => {
 
     // CORS
-    res.setHeader("Access-Control-Allow-Origin", "https://jryaykk.github.io");
+    res.setHeader("Access-Control-Allow-Origin", "https://jrjaykk.github.io");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
