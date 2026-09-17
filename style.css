@@ -309,3 +309,122 @@ footer {
         padding: 14px;
     }
 }
+
+/* =========================
+   ARISU FUTURISTIC LOGO
+   ========================= */
+
+.reactor-core {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 145px;
+    height: 145px;
+
+    border-radius: 50%;
+
+    color: #00f6ff;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0, 246, 255, 0.30) 0%,
+            rgba(0, 246, 255, 0.12) 35%,
+            rgba(0, 0, 0, 0.9) 70%
+        );
+
+    box-shadow:
+        0 0 20px rgba(0, 246, 255, 0.7),
+        0 0 50px rgba(0, 246, 255, 0.35),
+        inset 0 0 25px rgba(0, 246, 255, 0.25);
+
+    z-index: 5;
+}
+
+.arisu-logo {
+    width: 95px;
+    height: 95px;
+
+    color: #00f6ff;
+
+    filter:
+        drop-shadow(0 0 5px #00f6ff)
+        drop-shadow(0 0 15px rgba(0, 246, 255, 0.8));
+
+    animation: logoPulse 2s ease-in-out infinite;
+}
+
+/* Extra futuristic orbit */
+
+.logo-orbit {
+    position: absolute;
+
+    border: 2px solid rgba(0, 246, 255, 0.75);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+.orbit-1 {
+    width: 175px;
+    height: 175px;
+
+    animation: orbitSpin 8s linear infinite;
+}
+
+.orbit-2 {
+    width: 195px;
+    height: 195px;
+
+    border-style: dashed;
+    border-width: 2px;
+
+    opacity: 0.6;
+
+    animation: orbitSpinReverse 12s linear infinite;
+}
+
+
+/* Logo breathing effect */
+
+@keyframes logoPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter:
+            drop-shadow(0 0 5px #00f6ff)
+            drop-shadow(0 0 15px rgba(0, 246, 255, 0.7));
+    }
+
+    50% {
+        transform: scale(1.06);
+        filter:
+            drop-shadow(0 0 10px #00f6ff)
+            drop-shadow(0 0 25px rgba(0, 246, 255, 1));
+    }
+}
+
+
+/* Orbit animation */
+
+@keyframes orbitSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes orbitSpinReverse {
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+}
