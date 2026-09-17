@@ -5,7 +5,7 @@ const status = document.getElementById("status");
 const chatBox = document.getElementById("chatBox");
 const clearChatBtn = document.getElementById("clearChatBtn");
 
-const BACKEND_URL = "https://arisu-29th.onrender.com";
+const BACKEND_URL = "https://arisu-29rh.onrender.com";
 
 function speak(text) {
     const speech = new SpeechSynthesisUtterance(text);
