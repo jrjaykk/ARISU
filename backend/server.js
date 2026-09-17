@@ -1,6 +1,11 @@
 const http = require("http");
+const OpenAI = require("openai");
 
 const PORT = process.env.PORT || 3000;
+
+const client = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
 
 const server = http.createServer(async (req, res) => {
 
@@ -9,7 +14,7 @@ const server = http.createServer(async (req, res) => {
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    // OPTIONS request
+    // OPTIONS
     if (req.method === "OPTIONS") {
         res.writeHead(204);
         res.end();
@@ -26,7 +31,7 @@ const server = http.createServer(async (req, res) => {
         res.end(JSON.stringify({
             status: "online",
             assistant: "ARISU",
-            message: "ARISU backend is working."
+            message: "ARISU AI backend is working."
         }));
 
         return;
@@ -46,7 +51,6 @@ const server = http.createServer(async (req, res) => {
             try {
 
                 const data = JSON.parse(body);
-
                 const userMessage = data.message;
 
                 if (!userMessage) {
@@ -61,17 +65,21 @@ const server = http.createServer(async (req, res) => {
                     return;
                 }
 
-                /*
-                 * AI connection will be added here.
-                 * API key will NOT be stored in GitHub.
-                 */
+                const response = await client.responses.create({
+                    model: "gpt-5.6-luna",
+                    instructions:
+                        "You are ARISU, a helpful personal AI assistant. Answer clearly, naturally and concisely.",
+                    input: userMessage
+                });
+
+                const reply = response.output_text;
 
                 res.writeHead(200, {
                     "Content-Type": "application/json"
                 });
 
                 res.end(JSON.stringify({
-                    reply: "I received your message: " + userMessage
+                    reply: reply
                 }));
 
             } catch (error) {
@@ -83,7 +91,7 @@ const server = http.createServer(async (req, res) => {
                 });
 
                 res.end(JSON.stringify({
-                    error: "Server error."
+                    error: "AI request failed."
                 }));
             }
 
@@ -102,7 +110,6 @@ const server = http.createServer(async (req, res) => {
     }));
 });
 
-
 server.listen(PORT, () => {
-   console.log(`ARISU backend running on port ${PORT}`);
+    console.log(ARISU backend running on port ${PORT});
 });
