@@ -1125,3 +1125,35 @@ textarea {
         letter-spacing: 5px;
     }
 }
+
+.login-logo {
+    font-size: 65px;
+    color: #00eaff;
+
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 30px rgba(0, 234, 255, 0.7);
+
+    margin-bottom: -5px;
+}
+
+.login-brand {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: 12px;
+
+    color: #00eaff;
+
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 30px rgba(0, 234, 255, 0.5);
+}
+
+.login-subtitle {
+    margin-top: 5px;
+    margin-bottom: 25px;
+
+    color: #00aeca;
+    letter-spacing: 4px;
+    font-size: 12px;
+}
