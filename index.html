@@ -33,7 +33,7 @@
 
 </div>
 
-    <div class="app">
+   <div id="arisuApp" class="app">
 
         <header>
             <h1>ARISU</h1>
@@ -262,6 +262,27 @@ loginBtn.addEventListener("click", async function() {
 
     authMessage.innerText = "Login successful.";
 
+});
+</script>
+       <script>
+async function checkLogin() {
+
+    const result = await supabaseClient.auth.getSession();
+    const session = result.data.session;
+
+    if (session) {
+        authScreen.style.display = "none";
+        arisuApp.style.display = "block";
+    } else {
+        authScreen.style.display = "block";
+        arisuApp.style.display = "none";
+    }
+}
+
+checkLogin();
+
+loginBtn.addEventListener("click", function() {
+    setTimeout(checkLogin, 500);
 });
 </script>
 </body>
