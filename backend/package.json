@@ -6,9 +6,10 @@
   "scripts": {
     "start": "node server.js"
   },
-  "dependencies": {
-    "openai": "^5.12.0"
-  },
+"dependencies": {
+    "openai": "^5.12.0",
+    "@supabase/supabase-js": "^2.57.0"
+},
   "engines": {
     "node": ">=18"
   }
