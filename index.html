@@ -39,6 +39,13 @@
             <h1>ARISU</h1>
             <p>ADVANCED INTELLIGENT SYSTEM</p>
         </header>
+       <div class="profile-bar">
+
+    <button id="profileBtn">👤 PROFILE</button>
+
+    <button id="logoutBtn">🚪 LOGOUT</button>
+
+</div>
 
         <div class="system-status">
             <span class="status-light"></span>
@@ -284,6 +291,43 @@ checkLogin();
 loginBtn.addEventListener("click", function() {
     setTimeout(checkLogin, 500);
 });
+</script>
+<script>
+
+const profileBtn = document.getElementById("profileBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+
+profileBtn.addEventListener("click", async function() {
+
+    const result = await supabaseClient.auth.getUser();
+
+    if (result.error || !result.data.user) {
+        return;
+    }
+
+    const user = result.data.user;
+
+    alert(
+        "ARISU PROFILE\n\n" +
+        "Email: " + user.email
+    );
+
+});
+
+logoutBtn.addEventListener("click", async function() {
+
+    const result = await supabaseClient.auth.signOut();
+
+    if (result.error) {
+        alert("Logout failed.");
+        return;
+    }
+
+    arisuApp.style.display = "none";
+    authScreen.style.display = "block";
+
+});
+
 </script>
 </body>
 </html>
