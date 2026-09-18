@@ -566,3 +566,92 @@ footer {
         transform: translateY(0);
     }
 }
+
+/* ================================
+   ARISU CHAT AREA
+================================ */
+
+#chatBox {
+    background: #000000;
+    min-height: 420px;
+    max-height: 600px;
+    overflow-y: auto;
+
+    padding: 22px;
+    margin-top: 15px;
+
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    border-radius: 16px;
+
+    box-shadow:
+        0 0 20px rgba(0, 255, 255, 0.08),
+        inset 0 0 25px rgba(0, 255, 255, 0.03);
+
+    line-height: 1.7;
+    font-size: 16px;
+}
+
+
+/* USER + ARISU MESSAGE */
+
+#chatBox .message {
+    margin-bottom: 18px;
+    padding: 14px 17px;
+
+    border-radius: 12px;
+
+    word-wrap: break-word;
+}
+
+
+/* MESSAGE SENDER */
+
+#chatBox .sender {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+
+/* IMPORTANT WORDS */
+
+#chatBox strong {
+    font-weight: 800;
+}
+
+
+/* Scrollbar */
+
+#chatBox::-webkit-scrollbar {
+    width: 7px;
+}
+
+#chatBox::-webkit-scrollbar-track {
+    background: #000;
+}
+
+#chatBox::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.35);
+    border-radius: 10px;
+}
+
+#chatBox::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 255, 0.65);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    #chatBox {
+        min-height: 480px;
+        max-height: 65vh;
+
+        padding: 15px;
+        font-size: 15px;
+    }
+
+    #chatBox .message {
+        padding: 12px 14px;
+    }
+}
