@@ -119,20 +119,40 @@ async function runCommand() {
 
     try {
 
-        const response = await fetch(
-            BACKEND_URL + "/api/chat",
-            {
-                method: "POST",
+        const sessionResult =
+    await supabaseClient.auth.getSession();
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+const session =
+    sessionResult.data.session;
 
-                body: JSON.stringify({
-                    message: command
-                })
-            }
-        );
+if (!session) {
+
+    addMessage(
+        "ARISU",
+        "Please login first."
+    );
+
+    return;
+}
+
+
+const response = await fetch(
+    BACKEND_URL + "/api/chat",
+    {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+
+            "Authorization":
+                "Bearer " + session.access_token
+        },
+
+        body: JSON.stringify({
+            message: command
+        })
+    }
+);
 
         const data = await response.json();
 
