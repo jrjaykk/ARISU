@@ -194,5 +194,73 @@ loginBtn.addEventListener("click", async function() {
 });
         
 </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+const SUPABASE_URL = ...
+const SUPABASE_KEY = ...
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+</script>
+    <script>
+const signUpBtn = document.getElementById("signUpBtn");
+const loginBtn = document.getElementById("loginBtn");
+
+const emailInput = document.getElementById("emailInput");
+const passwordInput = document.getElementById("passwordInput");
+const authMessage = document.getElementById("authMessage");
+
+signUpBtn.addEventListener("click", async function() {
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (email === "" || password === "") {
+        authMessage.innerText = "Please enter email and password.";
+        return;
+    }
+
+    const result = await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+    });
+
+    if (result.error) {
+        authMessage.innerText = result.error.message;
+        return;
+    }
+
+    authMessage.innerText =
+        "Account created. Check your email to confirm your account.";
+
+});
+
+loginBtn.addEventListener("click", async function() {
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (email === "" || password === "") {
+        authMessage.innerText = "Please enter email and password.";
+        return;
+    }
+
+    const result = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (result.error) {
+        authMessage.innerText = result.error.message;
+        return;
+    }
+
+    authMessage.innerText = "Login successful.";
+
+});
+</script>
 </body>
 </html>
