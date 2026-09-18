@@ -655,3 +655,22 @@ footer {
         padding: 12px 14px;
     }
 }
+
+/* ARISU MESSAGE FORMATTING */
+
+.message-text {
+    line-height: 1.7;
+}
+
+.message-text strong {
+    font-weight: 800;
+}
+
+.message-text h3 {
+    margin: 12px 0 8px;
+    font-size: 18px;
+}
+
+.message-text br {
+    line-height: 1.7;
+}
