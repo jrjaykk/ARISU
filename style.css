@@ -674,3 +674,454 @@ footer {
 .message-text br {
     line-height: 1.7;
 }
+
+/* =====================================================
+   ARISU — PREMIUM BLACK / CYAN UI
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #000;
+    color: #e8ffff;
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}
+
+/* Subtle futuristic background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 50% 35%,
+            rgba(0, 220, 255, 0.10),
+            transparent 32%),
+        radial-gradient(circle at 10% 90%,
+            rgba(0, 140, 255, 0.07),
+            transparent 25%);
+    z-index: -1;
+}
+
+
+/* =====================================================
+   LOGIN SCREEN
+===================================================== */
+
+#authScreen {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Cyan glow behind login */
+#authScreen::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(0, 210, 255, 0.12),
+        transparent 68%
+    );
+
+    pointer-events: none;
+}
+
+
+/* Login heading */
+
+#authScreen h2 {
+    font-size: 38px;
+    letter-spacing: 8px;
+    margin-bottom: 30px;
+
+    color: #00eaff;
+
+    text-shadow:
+        0 0 8px rgba(0, 234, 255, 0.8),
+        0 0 25px rgba(0, 234, 255, 0.4);
+}
+
+
+/* Login card */
+
+#authScreen {
+    padding: 30px;
+}
+
+#authScreen input {
+    width: min(380px, 90vw);
+
+    padding: 15px 18px;
+    margin: 7px;
+
+    border-radius: 10px;
+    border: 1px solid rgba(0, 220, 255, 0.55);
+
+    background: #030b0f;
+    color: white;
+
+    outline: none;
+    font-size: 15px;
+
+    box-shadow:
+        inset 0 0 15px rgba(0, 200, 255, 0.04);
+}
+
+#authScreen input:focus {
+    border-color: #00eaff;
+
+    box-shadow:
+        0 0 12px rgba(0, 234, 255, 0.25),
+        inset 0 0 15px rgba(0, 234, 255, 0.05);
+}
+
+#authScreen input::placeholder {
+    color: #6e9299;
+}
+
+
+/* Login buttons */
+
+#authScreen button {
+    min-width: 130px;
+
+    padding: 12px 20px;
+    margin: 12px 4px;
+
+    border: 1px solid #00dfff;
+    border-radius: 9px;
+
+    background: #02090c;
+    color: #00eaff;
+
+    cursor: pointer;
+    font-weight: bold;
+
+    transition: 0.25s;
+}
+
+#authScreen button:hover {
+    background: #00cfee;
+    color: #000;
+
+    box-shadow:
+        0 0 15px rgba(0, 230, 255, 0.6);
+}
+
+#authMessage {
+    color: #00eaff;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   MAIN ARISU APP
+===================================================== */
+
+#arisuApp {
+    min-height: 100vh;
+    background: #000;
+
+    padding: 25px 4vw 35px;
+}
+
+
+/* Header */
+
+#arisuApp header {
+    text-align: center;
+    position: relative;
+}
+
+#arisuApp header h1 {
+    color: #00eaff;
+
+    letter-spacing: 12px;
+    font-size: clamp(40px, 6vw, 76px);
+
+    margin: 15px 0 5px;
+
+    text-shadow:
+        0 0 8px #00eaff,
+        0 0 25px rgba(0, 234, 255, 0.55),
+        0 0 50px rgba(0, 234, 255, 0.20);
+}
+
+#arisuApp header p {
+    color: #00bcd4;
+    letter-spacing: 5px;
+}
+
+
+/* =====================================================
+   PROFILE / LOGOUT
+===================================================== */
+
+.profile-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    max-width: 1450px;
+    margin: 10px auto;
+}
+
+.profile-bar button {
+    padding: 10px 16px;
+
+    border: 1px solid rgba(0, 230, 255, 0.7);
+    border-radius: 20px;
+
+    background: #02090c;
+    color: #00eaff;
+
+    cursor: pointer;
+    font-weight: bold;
+
+    transition: 0.25s;
+}
+
+.profile-bar button:hover {
+    background: #00dfff;
+    color: #000;
+
+    box-shadow:
+        0 0 18px rgba(0, 230, 255, 0.65);
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+#status {
+    text-align: center;
+    color: #00ff9d;
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 0 10px rgba(0, 255, 157, 0.6);
+}
+
+
+/* =====================================================
+   CHAT AREA — BIGGER + PURE BLACK
+===================================================== */
+
+#chatBox {
+    width: min(1400px, 94vw);
+
+    height: 62vh;
+    min-height: 500px;
+
+    margin: 30px auto 20px;
+
+    padding: 28px;
+
+    background: #000;
+
+    border: 1px solid rgba(0, 220, 255, 0.75);
+    border-radius: 20px;
+
+    overflow-y: auto;
+
+    box-shadow:
+        0 0 20px rgba(0, 220, 255, 0.08);
+
+    line-height: 1.7;
+    font-size: 16px;
+}
+
+
+/* Messages */
+
+#chatBox .message {
+    width: fit-content;
+    max-width: 80%;
+
+    margin-bottom: 22px;
+    padding: 14px 18px;
+
+    border-radius: 14px;
+
+    background: #02090c;
+
+    border: 1px solid rgba(0, 220, 255, 0.35);
+
+    box-shadow:
+        0 0 12px rgba(0, 220, 255, 0.06);
+}
+
+
+/* Sender */
+
+#chatBox .sender {
+    color: #00eaff;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 7px;
+
+    text-shadow:
+        0 0 8px rgba(0, 234, 255, 0.5);
+}
+
+
+/* Important words */
+
+#chatBox strong {
+    color: #ffffff;
+    font-weight: 900;
+
+    text-shadow:
+        0 0 7px rgba(255, 255, 255, 0.25);
+}
+
+
+/* Headings */
+
+#chatBox h3 {
+    color: #00eaff;
+
+    margin: 12px 0 8px;
+
+    text-shadow:
+        0 0 8px rgba(0, 234, 255, 0.45);
+}
+
+
+/* Scrollbar */
+
+#chatBox::-webkit-scrollbar {
+    width: 7px;
+}
+
+#chatBox::-webkit-scrollbar-track {
+    background: #000;
+}
+
+#chatBox::-webkit-scrollbar-thumb {
+    background: #075d69;
+    border-radius: 10px;
+}
+
+#chatBox::-webkit-scrollbar-thumb:hover {
+    background: #00dfff;
+}
+
+
+/* =====================================================
+   INPUT AREA
+===================================================== */
+
+input,
+textarea {
+    background: #02090c;
+    color: white;
+}
+
+#commandInput {
+    background: #02090c !important;
+
+    border: 1px solid rgba(0, 225, 255, 0.7) !important;
+    color: white !important;
+
+    box-shadow:
+        0 0 12px rgba(0, 220, 255, 0.08);
+}
+
+#commandInput:focus {
+    border-color: #00eaff !important;
+
+    box-shadow:
+        0 0 18px rgba(0, 230, 255, 0.25) !important;
+}
+
+
+/* Buttons around chat */
+
+#sendBtn,
+#micBtn,
+#clearChatBtn,
+#voiceToggleBtn {
+    border: 1px solid rgba(0, 230, 255, 0.75);
+
+    background: #02090c;
+    color: #00eaff;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+#sendBtn:hover,
+#micBtn:hover,
+#clearChatBtn:hover,
+#voiceToggleBtn:hover {
+    background: #00dfff;
+    color: #000;
+
+    box-shadow:
+        0 0 18px rgba(0, 230, 255, 0.55);
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    #arisuApp {
+        padding: 15px 10px 25px;
+    }
+
+    #arisuApp header h1 {
+        font-size: 42px;
+        letter-spacing: 7px;
+    }
+
+    .profile-bar {
+        justify-content: center;
+    }
+
+    #chatBox {
+        width: 96vw;
+        height: 65vh;
+        min-height: 450px;
+
+        padding: 16px;
+    }
+
+    #chatBox .message {
+        max-width: 92%;
+    }
+
+    #authScreen h2 {
+        font-size: 30px;
+        letter-spacing: 5px;
+    }
+}
