@@ -61,29 +61,23 @@ voiceToggleBtn.addEventListener("click", function() {
 updateVoiceButton();
 }
 
-function addMessage(sender, text) {
+function addMessage(sender, message) {
 
-    const message = document.createElement("div");
+    const messageDiv = document.createElement("div");
 
-    if (sender === "ARISU") {
-        message.className = "message arisu-message";
-    } else {
-        message.className = "message user-message";
-    }
+    messageDiv.className = "message";
 
-    const nameDiv = document.createElement("div");
-    nameDiv.className = "message-name";
-    nameDiv.textContent = sender;
+    // Important words ko bold karna
+    let formattedMessage = message
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
 
-    const textDiv = document.createElement("div");
-    textDiv.className = "message-text";
-    textDiv.textContent = text;
+    messageDiv.innerHTML =
+        "<div class='sender'>" + sender + "</div>" +
+        "<div class='message-text'>" + formattedMessage + "</div>";
 
-    message.appendChild(nameDiv);
-    message.appendChild(textDiv);
+    chatBox.appendChild(messageDiv);
 
-    chatBox.appendChild(message);
-
+    // Automatically bottom par scroll
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
