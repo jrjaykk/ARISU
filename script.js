@@ -8,6 +8,30 @@ const clearChatBtn = document.getElementById("clearChatBtn");
 const BACKEND_URL = "https://arisu-29rh.onrender.com";
 
 function speak(text) {
+    let voiceEnabled = localStorage.getItem("arisuVoiceEnabled");
+
+if (voiceEnabled === null) {
+    voiceEnabled = true;
+} else {
+    voiceEnabled = voiceEnabled === "true";
+}
+
+const voiceToggleBtn = document.getElementById("voiceToggleBtn");
+
+function updateVoiceButton() {
+    if (voiceEnabled) {
+        voiceToggleBtn.innerText = "🔊 Voice ON";
+    } else {
+        voiceToggleBtn.innerText = "🔇 Voice OFF";
+    }
+}
+
+function speak(text) {
+
+    if (!voiceEnabled) {
+        return;
+    }
+
     const speech = new SpeechSynthesisUtterance(text);
 
     speech.rate = 0.95;
@@ -16,6 +40,25 @@ function speak(text) {
 
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(speech);
+}
+
+voiceToggleBtn.addEventListener("click", function() {
+
+    voiceEnabled = !voiceEnabled;
+
+    localStorage.setItem(
+        "arisuVoiceEnabled",
+        voiceEnabled
+    );
+
+    if (!voiceEnabled) {
+        window.speechSynthesis.cancel();
+    }
+
+    updateVoiceButton();
+});
+
+updateVoiceButton();
 }
 
 function addMessage(sender, text) {
