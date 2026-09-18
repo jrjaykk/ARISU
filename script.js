@@ -67,9 +67,31 @@ function addMessage(sender, message) {
 
     messageDiv.className = "message";
 
-    // Important words ko bold karna
-    let formattedMessage = message
-        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    let formattedMessage = message;
+
+    // Bold: text
+    formattedMessage = formattedMessage.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+    // Headings: ## Heading
+    formattedMessage = formattedMessage.replace(
+        /^## (.*)$/gm,
+        "<h3>$1</h3>"
+    );
+
+    // Bullet points: - text
+    formattedMessage = formattedMessage.replace(
+        /^- (.*)$/gm,
+        "• $1"
+    );
+
+    // New lines
+    formattedMessage = formattedMessage.replace(
+        /\n/g,
+        "<br>"
+    );
 
     messageDiv.innerHTML =
         "<div class='sender'>" + sender + "</div>" +
@@ -77,7 +99,7 @@ function addMessage(sender, message) {
 
     chatBox.appendChild(messageDiv);
 
-    // Automatically bottom par scroll
+    // Automatically scroll to latest message
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
