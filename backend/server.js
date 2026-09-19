@@ -200,23 +200,39 @@ const server = http.createServer(async (req, res) => {
                 // SAVE MEMORY
                 // ==========================================
 
-                let memoryToSave = null;
+                // ==========================================
+// MEMORY DETECTION
+// ==========================================
+
+let memoryToSave = null;
+
+const text = userMessage.trim();
 
 
-                // Example:
-                // My name is Jay
+// ------------------------------------------
+// My name is Jay
+// Mera naam Jay hai
+// My name is Jay, remember it
+// ------------------------------------------
 
-                const nameMatch =
-                    userMessage.match(
-                        /\bmy name is ([a-zA-Z][a-zA-Z .'-]{0,50})/i
-                    );
-                // Hindi / Hinglish name detection
-const hindiNameMatch =
-    userMessage.match(
-        /\bmera naam ([a-zA-Z][a-zA-Z .'-]{0,50}?)(?: hai| h|$)/i
-    );
+const nameMatch = text.match(
+    /\bmy name is ([a-zA-Z][a-zA-Z .'-]{0,50})/i
+);
 
-if (!nameMatch && hindiNameMatch) {
+const hindiNameMatch = text.match(
+    /\bmera naam ([a-zA-Z][a-zA-Z .'-]{0,50}?)(?:\s+hai\b|\s+h\b|,|\.|$)/i
+);
+
+
+if (nameMatch) {
+
+    memoryToSave =
+        "My name is " +
+        nameMatch[1].trim() +
+        ".";
+
+}
+else if (hindiNameMatch) {
 
     memoryToSave =
         "My name is " +
@@ -226,88 +242,100 @@ if (!nameMatch && hindiNameMatch) {
 }
 
 
-                if (nameMatch) {
+// ------------------------------------------
+// Remember / Yaad rakhna
+// ------------------------------------------
 
-                    memoryToSave =
-                        "My name is " +
-                        nameMatch[1].trim() +
-                        ".";
-                }
+if (!memoryToSave) {
+
+    const rememberMatch = text.match(
+        /\b(?:remember that|remember this|yaad rakhna|yaad rakho|yaad rakhna ki)\s+(.+)/i
+    );
+
+    if (rememberMatch) {
+
+        const memory = rememberMatch[1]
+            .trim()
+            .replace(/[.!?]+$/, "");
+
+        if (memory.length > 0) {
+
+            memoryToSave = memory;
+
+        }
+
+    }
+
+}
 
 
-                // Example:
-                // Remember that I like football
+// ==========================================
+// SAVE MEMORY
+// ==========================================
 
-              const rememberMatch =
-    userMessage.match(
-        /\b(?:remember that|yaad rakhna|yaad rakho|yaad rakhna ki|remember this)\s+(.+)/i
+if (memoryToSave) {
+
+    console.log(
+        "MEMORY TO SAVE:",
+        memoryToSave
     );
 
 
-                if (
-                    !memoryToSave &&
-                    rememberMatch
-                ) {
+    const existingMemory =
+        await supabaseAdmin
+            .from("memories")
+            .select("id")
+            .eq("user_id", userId)
+            .eq("memory", memoryToSave)
+            .limit(1);
 
-                    const memory =
-                        rememberMatch[1].trim();
 
-                    if (memory.length > 0) {
+    if (existingMemory.error) {
 
-                        memoryToSave =
-                            memory;
+        console.error(
+            "MEMORY CHECK ERROR:",
+            existingMemory.error
+        );
+
+    }
+
+
+    if (
+        !existingMemory.data ||
+        existingMemory.data.length === 0
+    ) {
+
+        const insertResult =
+            await supabaseAdmin
+                .from("memories")
+                .insert([
+                    {
+                        user_id: userId,
+                        memory: memoryToSave
                     }
-                }
+                ]);
 
 
-                // ------------------------------
-                // Save if memory exists
-                // ------------------------------
+        if (insertResult.error) {
 
-                if (memoryToSave) {
+            console.error(
+                "MEMORY SAVE ERROR:",
+                insertResult.error
+            );
 
-                    const existingMemory =
-                        await supabaseAdmin
-                            .from("memories")
-                            .select("id")
-                            .eq("user_id", userId)
-                            .eq("memory", memoryToSave)
-                            .limit(1);
+        }
+        else {
 
+            console.log(
+                "MEMORY SAVED:",
+                memoryToSave
+            );
 
-                    if (
-                        !existingMemory.data ||
-                        existingMemory.data.length === 0
-                    ) {
+        }
 
-                        const insertResult =
-                            await supabaseAdmin
-                                .from("memories")
-                                .insert([
-                                    {
-                                        user_id: userId,
-                                        memory: memoryToSave
-                                    }
-                                ]);
+    }
 
-
-                        if (insertResult.error) {
-
-                            console.error(
-                                "MEMORY SAVE ERROR:",
-                                insertResult.error
-                            );
-
-                        } else {
-
-                            console.log(
-                                "Memory saved for user:",
-                                userId
-                            );
-                        }
-                    }
-                }
-
+}
 
                 // ==========================================
                 // ARISU AI
