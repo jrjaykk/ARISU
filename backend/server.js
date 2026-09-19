@@ -210,6 +210,20 @@ const server = http.createServer(async (req, res) => {
                     userMessage.match(
                         /\bmy name is ([a-zA-Z][a-zA-Z .'-]{0,50})/i
                     );
+                // Hindi / Hinglish name detection
+const hindiNameMatch =
+    userMessage.match(
+        /\bmera naam ([a-zA-Z][a-zA-Z .'-]{0,50}?)(?: hai| h|$)/i
+    );
+
+if (!nameMatch && hindiNameMatch) {
+
+    memoryToSave =
+        "My name is " +
+        hindiNameMatch[1].trim() +
+        ".";
+
+}
 
 
                 if (nameMatch) {
@@ -224,10 +238,10 @@ const server = http.createServer(async (req, res) => {
                 // Example:
                 // Remember that I like football
 
-                const rememberMatch =
-                    userMessage.match(
-                        /\bremember that (.+)/i
-                    );
+              const rememberMatch =
+    userMessage.match(
+        /\b(?:remember that|yaad rakhna|yaad rakho|yaad rakhna ki|remember this)\s+(.+)/i
+    );
 
 
                 if (
