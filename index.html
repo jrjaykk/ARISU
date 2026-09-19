@@ -335,36 +335,200 @@ loginBtn.addEventListener("click", function() {
 const profileBtn = document.getElementById("profileBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 
+const profilePanel = document.getElementById("profilePanel");
+const closeProfileBtn = document.getElementById("closeProfileBtn");
+
+const profileEmail = document.getElementById("profileEmail");
+const memoryList = document.getElementById("memoryList");
+
+
+// ==========================================
+// OPEN PROFILE
+// ==========================================
+
 profileBtn.addEventListener("click", async function() {
 
-    const result = await supabaseClient.auth.getUser();
+    profilePanel.style.display = "block";
+
+    profileEmail.innerText = "Loading...";
+    memoryList.innerHTML = "<p>Loading memories...</p>";
+
+
+    // Get current user
+
+    const result =
+        await supabaseClient.auth.getUser();
+
 
     if (result.error || !result.data.user) {
+
+        profileEmail.innerText = "Not logged in";
+        memoryList.innerHTML = "<p>Please login first.</p>";
+
         return;
     }
+
 
     const user = result.data.user;
 
-    alert(
-        "ARISU PROFILE\n\n" +
-        "Email: " + user.email
-    );
 
-});
+    // Show email
 
-logoutBtn.addEventListener("click", async function() {
+    profileEmail.innerText =
+        user.email;
 
-    const result = await supabaseClient.auth.signOut();
 
-    if (result.error) {
-        alert("Logout failed.");
+    // Load memories
+
+    const memoryResult =
+        await supabaseClient
+            .from("memories")
+            .select("id, memory, created_at")
+            .eq("user_id", user.id)
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (memoryResult.error) {
+
+        console.error(
+            "MEMORY LOAD ERROR:",
+            memoryResult.error
+        );
+
+        memoryList.innerHTML =
+            "<p>Unable to load memories.</p>";
+
         return;
     }
 
-    arisuApp.style.display = "none";
-    authScreen.style.display = "block";
+
+    const memories =
+        memoryResult.data || [];
+
+
+    // No memories
+
+    if (memories.length === 0) {
+
+        memoryList.innerHTML =
+            "<p>No memories saved yet.</p>";
+
+        return;
+    }
+
+
+    // Display memories
+
+    memoryList.innerHTML = "";
+
+
+    memories.forEach(function(item) {
+
+        const memoryDiv =
+            document.createElement("div");
+
+        memoryDiv.className =
+            "memory-item";
+
+
+        const memoryText =
+            document.createElement("span");
+
+        memoryText.innerText =
+            "🧠 " + item.memory;
+
+
+        const deleteBtn =
+            document.createElement("button");
+
+        deleteBtn.innerText =
+            "DELETE";
+
+
+        deleteBtn.addEventListener(
+            "click",
+            async function() {
+
+                const deleteResult =
+                    await supabaseClient
+                        .from("memories")
+                        .delete()
+                        .eq("id", item.id)
+                        .eq("user_id", user.id);
+
+
+                if (deleteResult.error) {
+
+                    alert(
+                        "Unable to delete memory."
+                    );
+
+                    return;
+                }
+
+
+                // Refresh memories
+
+                profileBtn.click();
+
+            }
+        );
+
+
+        memoryDiv.appendChild(memoryText);
+        memoryDiv.appendChild(deleteBtn);
+
+        memoryList.appendChild(memoryDiv);
+
+    });
 
 });
+
+
+// ==========================================
+// CLOSE PROFILE
+// ==========================================
+
+closeProfileBtn.addEventListener(
+    "click",
+    function() {
+
+        profilePanel.style.display = "none";
+
+    }
+);
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+logoutBtn.addEventListener(
+    "click",
+    async function() {
+
+        const result =
+            await supabaseClient.auth.signOut();
+
+
+        if (result.error) {
+
+            alert("Logout failed.");
+
+            return;
+        }
+
+
+        profilePanel.style.display = "none";
+
+        arisuApp.style.display = "none";
+
+        authScreen.style.display = "flex";
+
+    }
+);
 
 </script>
 </body>
