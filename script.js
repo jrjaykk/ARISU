@@ -1,6 +1,5 @@
 // ==========================================
-// ARISU FRONTEND
-// Chat + History + New Chat + Memory
+// ARISU - CLEAN FRONTEND
 // ==========================================
 
 const input = document.getElementById("commandInput");
@@ -9,6 +8,7 @@ const micBtn = document.getElementById("micBtn");
 const status = document.getElementById("status");
 const chatBox = document.getElementById("chatBox");
 const clearChatBtn = document.getElementById("clearChatBtn");
+const voiceToggleBtn = document.getElementById("voiceToggleBtn");
 
 const BACKEND_URL = "https://arisu-29rh.onrender.com";
 
@@ -16,7 +16,7 @@ let currentChatId = null;
 
 
 // ==========================================
-// VOICE SYSTEM
+// VOICE
 // ==========================================
 
 let voiceEnabled =
@@ -28,36 +28,27 @@ if (voiceEnabled === null) {
     voiceEnabled = voiceEnabled === "true";
 }
 
-const voiceToggleBtn =
-    document.getElementById("voiceToggleBtn");
-
 function updateVoiceButton() {
 
     if (!voiceToggleBtn) return;
 
-    if (voiceEnabled) {
-        voiceToggleBtn.innerText = "🔊 Voice ON";
-    } else {
-        voiceToggleBtn.innerText = "🔇 Voice OFF";
-    }
+    voiceToggleBtn.innerText =
+        voiceEnabled
+            ? "🔊 Voice ON"
+            : "🔇 Voice OFF";
 }
 
 function speak(text) {
 
-    if (!voiceEnabled) {
-        return;
-    }
+    if (!voiceEnabled) return;
 
-    if (!("speechSynthesis" in window)) {
-        return;
-    }
+    if (!("speechSynthesis" in window)) return;
 
     const speech =
         new SpeechSynthesisUtterance(text);
 
     speech.rate = 0.95;
     speech.pitch = 0.85;
-    speech.volume = 1;
 
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(speech);
@@ -86,36 +77,168 @@ if (voiceToggleBtn) {
 }
 
 updateVoiceButton();
-padding: 11px;
+
+
+// ==========================================
+// SESSION
+// ==========================================
+
+async function getSession() {
+
+    const result =
+        await supabaseClient.auth.getSession();
+
+    return result.data.session;
+}
+
+
+// ==========================================
+// CHAT SIDEBAR
+// ==========================================
+
+function createChatSidebar() {
+
+    if (document.getElementById("arisuSidebar")) {
+        return;
+    }
+
+    const sidebar =
+        document.createElement("aside");
+
+    sidebar.id = "arisuSidebar";
+
+    sidebar.innerHTML = `
+        <div class="sidebar-header">
+            <div class="sidebar-logo">✦</div>
+
+            <div>
+                <div class="sidebar-title">
+                    ARISU
+                </div>
+
+                <div class="sidebar-subtitle">
+                    AI ASSISTANT
+                </div>
+            </div>
+        </div>
+
+        <button id="newChatBtn"
+                class="new-chat-btn">
+            ＋ NEW CHAT
+        </button>
+
+        <div class="chat-history-title">
+            CHAT HISTORY
+        </div>
+
+        <div id="chatList">
+            <div class="chat-loading">
+                Loading chats...
+            </div>
+        </div>
+    `;
+
+    document.body.prepend(sidebar);
+
+
+    const style =
+        document.createElement("style");
+
+    style.id = "arisuSidebarStyle";
+
+    style.innerHTML = `
+        #arisuSidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 270px;
+            background: #02090c;
+            border-right: 1px solid rgba(0,234,255,.35);
+            padding: 20px;
+            z-index: 10000;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0,234,255,.2);
+        }
+
+        .sidebar-logo {
+            width: 45px;
+            height: 45px;
+            border: 1px solid #00eaff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00eaff;
+            font-size: 24px;
+        }
+
+        .sidebar-title {
+            color: #00eaff;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 4px;
+        }
+
+        .sidebar-subtitle {
+            color: #6b8990;
+            font-size: 9px;
+            letter-spacing: 2px;
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #00eaff;
+            background: rgba(0,234,255,.06);
+            color: #00eaff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .new-chat-btn:hover {
+            background: #00eaff;
+            color: #000;
+        }
+
+        .chat-history-title {
+            color: #507078;
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        #chatList {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 11px;
             border-radius: 8px;
-
-            border:
-                1px solid transparent;
-
             color: #b9d9dd;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .chat-item:hover {
-            background:
-                rgba(0,234,255,0.07);
-
-            border-color:
-                rgba(0,234,255,0.2);
-        }
-
+        .chat-item:hover,
         .chat-item.active {
-            background:
-                rgba(0,234,255,0.1);
-
-            border-color:
-                rgba(0,234,255,0.45);
-
-            color: #00eaff;
-
-            box-shadow:
-                inset 3px 0 0 #00eaff;
+            background: rgba(0,234,255,.1);
+            border: 1px solid rgba(0,234,255,.3);
         }
 
         .chat-name {
@@ -131,8 +254,6 @@ padding: 11px;
             border: none;
             color: #557078;
             cursor: pointer;
-            font-size: 13px;
-            padding: 3px;
         }
 
         .delete-chat-btn:hover {
@@ -150,19 +271,7 @@ padding: 11px;
             box-sizing: border-box;
         }
 
-        @media (max-width: 800px) {
-
-            #arisuSidebar {
-                width: 230px;
-            }
-
-            body {
-                padding-left: 230px;
-            }
-        }
-
         @media (max-width: 600px) {
-
             #arisuSidebar {
                 width: 210px;
             }
@@ -170,19 +279,10 @@ padding: 11px;
             body {
                 padding-left: 210px;
             }
-
-            .sidebar-title {
-                font-size: 17px;
-            }
         }
     `;
 
     document.head.appendChild(style);
-
-
-    // ======================================
-    // NEW CHAT BUTTON
-    // ======================================
 
     document
         .getElementById("newChatBtn")
@@ -192,9 +292,193 @@ padding: 11px;
         );
 }
 
-
 createChatSidebar();
-throw new Error(
+// ==========================================
+// LOAD CHAT LIST
+// ==========================================
+
+async function loadChatList() {
+
+    const chatList =
+        document.getElementById("chatList");
+
+    if (!chatList) return;
+
+    const session =
+        await getSession();
+
+    if (!session) {
+        chatList.innerHTML =
+            `<div class="chat-loading">
+                Please login.
+            </div>`;
+        return;
+    }
+
+    chatList.innerHTML =
+        `<div class="chat-loading">
+            Loading chats...
+        </div>`;
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL + "/api/chats",
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            "Bearer " +
+                            session.access_token
+                    }
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error ||
+                "Unable to load chats."
+            );
+        }
+
+        chatList.innerHTML = "";
+
+        const chats =
+            data.chats || [];
+
+        if (chats.length === 0) {
+
+            chatList.innerHTML =
+                `<div class="chat-loading">
+                    No chats yet.
+                </div>`;
+
+            return;
+        }
+
+        chats.forEach(function(chat) {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "chat-item";
+
+            if (
+                String(chat.id) ===
+                String(currentChatId)
+            ) {
+                item.classList.add("active");
+            }
+
+            const name =
+                document.createElement("div");
+
+            name.className =
+                "chat-name";
+
+            name.innerText =
+                chat.title || "New Chat";
+
+
+            const deleteBtn =
+                document.createElement("button");
+
+            deleteBtn.className =
+                "delete-chat-btn";
+
+            deleteBtn.innerText = "✕";
+
+            deleteBtn.addEventListener(
+                "click",
+                function(event) {
+
+                    event.stopPropagation();
+
+                    deleteChat(chat.id);
+                }
+            );
+
+
+            item.appendChild(name);
+            item.appendChild(deleteBtn);
+
+
+            item.addEventListener(
+                "click",
+                function() {
+
+                    loadChat(chat.id);
+                }
+            );
+
+
+            chatList.appendChild(item);
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "CHAT LIST ERROR:",
+            error
+        );
+
+        chatList.innerHTML =
+            `<div class="chat-loading">
+                Unable to load chats.
+            </div>`;
+    }
+}
+
+
+// ==========================================
+// CREATE NEW CHAT
+// ==========================================
+
+async function createNewChat() {
+
+    const session =
+        await getSession();
+
+    if (!session) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL + "/api/chats",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " +
+                            session.access_token
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
                 data.error ||
                 "Unable to create chat."
             );
@@ -228,13 +512,240 @@ throw new Error(
             error
         );
 
+
         addMessage(
             "ARISU",
             "Unable to create a new chat."
         );
     }
 }
-textDiv.className =
+
+
+// ==========================================
+// LOAD OLD CHAT
+// ==========================================
+
+async function loadChat(chatId) {
+
+    const session =
+        await getSession();
+
+    if (!session) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+
+    try {
+
+        status.innerText =
+            "LOADING CHAT...";
+
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/chats/" +
+                chatId +
+                "/messages",
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Authorization":
+                            "Bearer " +
+                            session.access_token
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Unable to load chat."
+            );
+        }
+
+
+        currentChatId =
+            chatId;
+
+
+        chatBox.innerHTML = "";
+
+
+        const messages =
+            data.messages || [];
+
+
+        if (messages.length === 0) {
+
+            addMessage(
+                "ARISU",
+                "This chat is empty. How may I assist you?"
+            );
+
+        } else {
+
+            messages.forEach(
+                function(message) {
+
+                    const sender =
+                        message.role === "user"
+                            ? "YOU"
+                            : "ARISU";
+
+
+                    addMessage(
+                        sender,
+                        message.content
+                    );
+
+                }
+            );
+        }
+
+
+        status.innerText =
+            "SYSTEM ONLINE";
+
+
+        await loadChatList();
+
+
+    } catch (error) {
+
+        console.error(
+            "LOAD CHAT ERROR:",
+            error
+        );
+
+
+        status.innerText =
+            "CONNECTION ERROR";
+
+
+        addMessage(
+            "ARISU",
+            "Unable to load this chat."
+        );
+    }
+}
+// ==========================================
+// DELETE CHAT
+// ==========================================
+
+async function deleteChat(chatId) {
+
+    if (!confirm("Delete this chat?")) {
+        return;
+    }
+
+    const session =
+        await getSession();
+
+    if (!session) return;
+
+    try {
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/api/chats/" +
+                chatId,
+                {
+                    method: "DELETE",
+
+                    headers: {
+                        "Authorization":
+                            "Bearer " +
+                            session.access_token
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Unable to delete chat."
+            );
+        }
+
+
+        if (
+            String(currentChatId) ===
+            String(chatId)
+        ) {
+
+            currentChatId = null;
+
+            chatBox.innerHTML = "";
+
+            addMessage(
+                "ARISU",
+                "Chat deleted. Start a new chat to continue."
+            );
+        }
+
+
+        await loadChatList();
+
+
+    } catch (error) {
+
+        console.error(
+            "DELETE CHAT ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to delete chat."
+        );
+    }
+}
+
+
+// ==========================================
+// MESSAGE DISPLAY
+// ==========================================
+
+function addMessage(sender, message) {
+
+    const messageDiv =
+        document.createElement("div");
+
+    messageDiv.className =
+        "message";
+
+
+    const senderDiv =
+        document.createElement("div");
+
+    senderDiv.className =
+        "sender";
+
+    senderDiv.innerText =
+        sender;
+
+
+    const textDiv =
+        document.createElement("div");
+
+    textDiv.className =
         "message-text";
 
 
@@ -245,40 +756,40 @@ textDiv.className =
             .replace(/>/g, "&gt;");
 
 
-    let formattedMessage =
+    let formatted =
         safeText;
 
 
-    formattedMessage =
-        formattedMessage.replace(
+    formatted =
+        formatted.replace(
             /\*\*(.*?)\*\*/g,
             "<strong>$1</strong>"
         );
 
 
-    formattedMessage =
-        formattedMessage.replace(
+    formatted =
+        formatted.replace(
             /^## (.*)$/gm,
             "<h3>$1</h3>"
         );
 
 
-    formattedMessage =
-        formattedMessage.replace(
+    formatted =
+        formatted.replace(
             /^- (.*)$/gm,
             "• $1"
         );
 
 
-    formattedMessage =
-        formattedMessage.replace(
+    formatted =
+        formatted.replace(
             /\n/g,
             "<br>"
         );
 
 
     textDiv.innerHTML =
-        formattedMessage;
+        formatted;
 
 
     messageDiv.appendChild(
@@ -298,6 +809,8 @@ textDiv.className =
     chatBox.scrollTop =
         chatBox.scrollHeight;
 }
+
+
 // ==========================================
 // SEND MESSAGE
 // ==========================================
@@ -328,10 +841,7 @@ async function runCommand() {
     }
 
 
-    // ======================================
-    // CREATE CHAT IF NONE EXISTS
-    // ======================================
-
+    // Create chat if needed
     if (!currentChatId) {
 
         try {
@@ -419,13 +929,8 @@ async function runCommand() {
                     },
 
                     body: JSON.stringify({
-
-                        message:
-                            command,
-
-                        chat_id:
-                            currentChatId
-
+                        message: command,
+                        chat_id: currentChatId
                     })
                 }
             );
@@ -483,7 +988,7 @@ async function runCommand() {
 
 
 // ==========================================
-// SEND BUTTON
+// SEND BUTTON + ENTER
 // ==========================================
 
 sendBtn.addEventListener(
@@ -491,10 +996,6 @@ sendBtn.addEventListener(
     runCommand
 );
 
-
-// ==========================================
-// ENTER KEY
-// ==========================================
 
 input.addEventListener(
     "keydown",
@@ -505,15 +1006,11 @@ input.addEventListener(
             event.preventDefault();
 
             runCommand();
-
         }
-
     }
 );
-
-
 // ==========================================
-// CLEAR CURRENT DISPLAY
+// CLEAR CHAT DISPLAY
 // ==========================================
 
 if (clearChatBtn) {
@@ -528,13 +1025,15 @@ if (clearChatBtn) {
                 "ARISU",
                 "Current chat display cleared. Your saved conversation remains in chat history."
             );
+
             speak(
                 "Current chat display cleared."
             );
-
         }
     );
 }
+
+
 // ==========================================
 // VOICE RECOGNITION
 // ==========================================
@@ -544,27 +1043,17 @@ const SpeechRecognition =
     window.webkitSpeechRecognition;
 
 
-if (SpeechRecognition) {
+if (SpeechRecognition && micBtn) {
 
     const recognition =
         new SpeechRecognition();
 
+    recognition.lang = "en-IN";
 
-    recognition.lang =
-        "en-IN";
+    recognition.continuous = false;
 
+    recognition.interimResults = false;
 
-    recognition.continuous =
-        false;
-
-
-    recognition.interimResults =
-        false;
-
-
-    // ======================================
-    // MIC BUTTON
-    // ======================================
 
     micBtn.addEventListener(
         "click",
@@ -573,10 +1062,8 @@ if (SpeechRecognition) {
             status.innerText =
                 "LISTENING...";
 
-
             micBtn.innerText =
                 "🔴";
-
 
             try {
 
@@ -585,19 +1072,13 @@ if (SpeechRecognition) {
             } catch (error) {
 
                 console.log(
-                    "MIC START ERROR:",
+                    "MIC ERROR:",
                     error
                 );
-
             }
-
         }
     );
 
-
-    // ======================================
-    // VOICE RESULT
-    // ======================================
 
     recognition.onresult =
         function(event) {
@@ -606,19 +1087,12 @@ if (SpeechRecognition) {
                 event.results[0][0]
                     .transcript;
 
-
             input.value =
                 command;
 
-
             runCommand();
-
         };
 
-
-    // ======================================
-    // VOICE ERROR
-    // ======================================
 
     recognition.onerror =
         function() {
@@ -626,22 +1100,15 @@ if (SpeechRecognition) {
             status.innerText =
                 "MIC ERROR";
 
-
             micBtn.innerText =
                 "🎤";
-
 
             addMessage(
                 "ARISU",
                 "I could not hear you. Please try again."
             );
-
         };
 
-
-    // ======================================
-    // VOICE ENDED
-    // ======================================
 
     recognition.onend =
         function() {
@@ -649,31 +1116,14 @@ if (SpeechRecognition) {
             micBtn.innerText =
                 "🎤";
 
-
-            setTimeout(
-                function() {
-
-                    status.innerText =
-                        "SYSTEM ONLINE";
-
-                },
-                500
-            );
-
+            status.innerText =
+                "SYSTEM ONLINE";
         };
 
 
-} else {
+} else if (micBtn) {
 
-    micBtn.disabled =
-        true;
-
-
-    addMessage(
-        "ARISU",
-        "Voice recognition is not supported in this browser."
-    );
-
+    micBtn.disabled = true;
 }
 
 
@@ -694,11 +1144,9 @@ async function initializeARISU() {
         }
 
 
-        // Load sidebar
         await loadChatList();
 
 
-        // Get chats
         const response =
             await fetch(
                 BACKEND_URL + "/api/chats",
@@ -724,16 +1172,13 @@ async function initializeARISU() {
             data.chats.length > 0
         ) {
 
-            // Open latest chat
             await loadChat(
                 data.chats[0].id
             );
 
         } else {
 
-            // No chat exists
             await createNewChat();
-
         }
 
 
@@ -743,14 +1188,12 @@ async function initializeARISU() {
             "INITIALIZATION ERROR:",
             error
         );
-
     }
-
 }
 
 
 // ==========================================
-// START ARISU
+// START
 // ==========================================
 
 setTimeout(
