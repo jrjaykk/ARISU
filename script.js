@@ -107,6 +107,8 @@ function createChatSidebar() {
 
     sidebar.id = "arisuSidebar";
 
+    sidebar.style.display = "none";
+
     sidebar.innerHTML = `
         <div class="sidebar-header">
             <div class="sidebar-logo">✦</div>
