@@ -331,17 +331,24 @@ loginBtn.addEventListener("click", async function() {
        <script>
 async function checkLogin() {
 
-    const result = await supabaseClient.auth.getSession();
-    const session = result.data.session;
+    const result =
+        await supabaseClient.auth.getSession();
 
-    if (session) {
-        authScreen.style.display = "none";
-        arisuApp.style.display = "block";
-    } else {
-        authScreen.style.display = "block";
-        arisuApp.style.display = "none";
-    }
+    const session =
+        result.data.session;
+
+    updateLoginUI(session);
 }
+
+checkLogin();
+
+supabaseClient.auth.onAuthStateChange(
+    function(event, session) {
+
+        updateLoginUI(session);
+
+    }
+);
 
 checkLogin();
 
