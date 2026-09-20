@@ -219,6 +219,28 @@ const emailInput = document.getElementById("emailInput");
 const passwordInput = document.getElementById("passwordInput");
 const authMessage = document.getElementById("authMessage");
 
+        const togglePasswordBtn =
+    document.getElementById("togglePasswordBtn");
+
+togglePasswordBtn.addEventListener(
+    "click",
+    function() {
+
+        if (passwordInput.type === "password") {
+
+            passwordInput.type = "text";
+            togglePasswordBtn.innerText = "🙈";
+
+        } else {
+
+            passwordInput.type = "password";
+            togglePasswordBtn.innerText = "👁";
+
+        }
+
+    }
+);
+
 signUpBtn.addEventListener("click", async function() {
 
     const email = emailInput.value.trim();
