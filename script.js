@@ -141,7 +141,7 @@ function createChatSidebar() {
     `;
 
     document.body.prepend(sidebar);
-
+    sidebar.style.display = "none";
 
     const style =
         document.createElement("style");
@@ -295,6 +295,7 @@ function createChatSidebar() {
 }
 
 createChatSidebar();
+document.getElementById("arisuSidebar").style.display = "none";
 // ==========================================
 // LOAD CHAT LIST
 // ==========================================
