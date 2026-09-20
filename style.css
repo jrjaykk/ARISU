@@ -2054,3 +2054,27 @@ textarea {
     }
 
 }
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.profile-actions button {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(0,234,255,0.35);
+    border-radius: 10px;
+    background: rgba(0,234,255,0.06);
+    color: #00eaff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.profile-actions button:hover {
+    background: rgba(0,234,255,0.15);
+    border-color: #00eaff;
+}
