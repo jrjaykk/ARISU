@@ -2078,3 +2078,30 @@ textarea {
     background: rgba(0,234,255,0.15);
     border-color: #00eaff;
 }
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 50px;
+    box-sizing: border-box;
+}
+
+.password-wrapper button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    background: transparent;
+    border: none;
+
+    color: #00eaff;
+    cursor: pointer;
+
+    font-size: 18px;
+    padding: 5px;
+}
