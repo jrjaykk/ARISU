@@ -269,7 +269,7 @@ function createChatSidebar() {
         }
 
         body {
-            padding-left: 270px;
+            padding-left: 0;
             box-sizing: border-box;
         }
 
