@@ -1202,3 +1202,52 @@ setTimeout(
     initializeARISU,
     700
 );
+
+// ==========================================
+// LOGIN UI CONTROL
+// ==========================================
+
+function updateLoginUI(session) {
+
+    const sidebar =
+        document.getElementById("arisuSidebar");
+
+    const app =
+        document.getElementById("arisuApp");
+
+    const auth =
+        document.getElementById("authScreen");
+
+    if (session) {
+
+        if (auth) {
+            auth.style.display = "none";
+        }
+
+        if (app) {
+            app.style.display = "block";
+        }
+
+        if (sidebar) {
+            sidebar.style.display = "block";
+        }
+
+        loadChatList();
+
+    } else {
+
+        if (auth) {
+            auth.style.display = "flex";
+        }
+
+        if (app) {
+            app.style.display = "none";
+        }
+
+        if (sidebar) {
+            sidebar.style.display = "none";
+        }
+
+        currentChatId = null;
+    }
+}
