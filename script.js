@@ -1230,7 +1230,7 @@ function updateLoginUI(session) {
         }
 
         if (sidebar) {
-            sidebar.style.display = "block";
+            sidebar.style.display = "none";
         }
 
         loadChatList();
