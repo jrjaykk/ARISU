@@ -541,6 +541,55 @@ logoutBtn.addEventListener(
     }
 );
 
+const profileNewChatBtn =
+    document.getElementById("profileNewChatBtn");
+
+const profileHistoryBtn =
+    document.getElementById("profileHistoryBtn");
+
+
+/* ==========================================
+   PROFILE → NEW CHAT
+========================================== */
+
+profileNewChatBtn.addEventListener(
+    "click",
+    async function() {
+
+        profilePanel.style.display = "none";
+
+        if (typeof createNewChat === "function") {
+            await createNewChat();
+        }
+
+    }
+);
+
+
+/* ==========================================
+   PROFILE → CHAT HISTORY
+========================================== */
+
+profileHistoryBtn.addEventListener(
+    "click",
+    function() {
+
+        profilePanel.style.display = "none";
+
+        const sidebar =
+            document.getElementById("arisuSidebar");
+
+        if (sidebar) {
+
+            sidebar.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }
+
+    }
+);
 </script>
 </body>
 </html>
