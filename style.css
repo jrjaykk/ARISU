@@ -2143,3 +2143,46 @@ textarea {
     font-size: 18px;
     cursor: pointer;
 }
+
+.login-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.login-buttons button {
+    min-width: 130px !important;
+}
+
+.password-wrapper {
+    position: relative;
+    width: min(380px, 90vw);
+}
+
+.password-wrapper input {
+    width: 100% !important;
+    margin: 7px 0 !important;
+    padding-right: 55px !important;
+}
+
+.password-wrapper button {
+    position: absolute !important;
+    right: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    color: #00eaff !important;
+    font-size: 18px;
+}
