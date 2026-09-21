@@ -279,7 +279,7 @@ function createChatSidebar() {
             }
 
             body {
-                padding-left: 210px;
+                padding-left: 0;
             }
         }
     `;
