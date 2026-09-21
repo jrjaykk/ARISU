@@ -159,18 +159,6 @@ sidebar.appendChild(closeBtn);
     `;
 
     document.body.prepend(sidebar);
-    document.addEventListener("click", function(e) {
-    const sidebar = document.getElementById("arisuSidebar");
-
-    if (
-        sidebar &&
-        sidebar.style.display === "block" &&
-        !sidebar.contains(e.target) &&
-        e.target.id !== "profileHistoryBtn"
-    ) {
-        sidebar.style.display = "none";
-    }
-});
     sidebar.style.display = "none";
 
     const style =
