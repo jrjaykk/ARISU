@@ -629,9 +629,14 @@ profileHistoryBtn.addEventListener(
             document.getElementById("arisuSidebar");
 
         if (sidebar) {
-    sidebar.style.display = "block";
-    loadChatList();
-        }
+    const isOpen = sidebar.style.display === "block";
+
+    sidebar.style.display = isOpen ? "none" : "block";
+
+    if (!isOpen) {
+        loadChatList();
+    }
+}
 
     }
 );
