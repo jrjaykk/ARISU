@@ -689,6 +689,7 @@ body {
     color: #e8ffff;
     font-family: Arial, Helvetica, sans-serif;
     min-height: 100vh;
+    display: block;
 }
 
 /* Subtle futuristic background */
