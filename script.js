@@ -104,6 +104,24 @@ function createChatSidebar() {
 
     const sidebar =
         document.createElement("aside");
+    const closeBtn = document.createElement("button");
+
+closeBtn.innerText = "✕";
+closeBtn.style.position = "absolute";
+closeBtn.style.top = "15px";
+closeBtn.style.right = "15px";
+closeBtn.style.background = "transparent";
+closeBtn.style.border = "none";
+closeBtn.style.color = "#00eaff";
+closeBtn.style.fontSize = "22px";
+closeBtn.style.cursor = "pointer";
+closeBtn.style.zIndex = "10";
+
+closeBtn.onclick = function () {
+    sidebar.style.display = "none";
+};
+
+sidebar.appendChild(closeBtn);
 
     sidebar.id = "arisuSidebar";
 
