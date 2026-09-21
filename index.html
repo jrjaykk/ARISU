@@ -629,12 +629,8 @@ profileHistoryBtn.addEventListener(
             document.getElementById("arisuSidebar");
 
         if (sidebar) {
-
-            sidebar.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
+    sidebar.style.display = "block";
+    loadChatList();
         }
 
     }
