@@ -314,20 +314,6 @@ sidebar.appendChild(closeBtn);
 
 createChatSidebar();
 document.getElementById("arisuSidebar").style.display = "none";
-let touchStartX = 0;
-
-sidebar.addEventListener("touchstart", function(e) {
-    touchStartX = e.touches[0].clientX;
-});
-
-sidebar.addEventListener("touchend", function(e) {
-    const touchEndX = e.changedTouches[0].clientX;
-    const swipeDistance = touchEndX - touchStartX;
-
-    if (swipeDistance < -70) {
-        sidebar.style.display = "none";
-    }
-});
 // ==========================================
 // LOAD CHAT LIST
 // ==========================================
