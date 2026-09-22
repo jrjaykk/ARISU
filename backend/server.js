@@ -634,15 +634,14 @@ const server = http.createServer(async (req, res) => {
             // ------------------------------------------
 
             const nameMatch =
-                text.match(
-                    /\bmy name is ([a-zA-Z][a-zA-Z .'-]{0,50})/i
-                );
+    text.match(
+        /\bmy\s+name\s+is\s+([a-zA-Z][a-zA-Z .'-]{0,50}?)(?:\s+is\b|\s+hai\b|\s+h\b|,|\.|$)/i
+    );
 
-
-            const hindiNameMatch =
-                text.match(
-                    /\bmera naam ([a-zA-Z][a-zA-Z .'-]{0,50}?)(?:\s+hai\b|\s+h\b|,|\.|$)/i
-                );
+const hindiNameMatch =
+    text.match(
+        /\bmera\s+(?:naam|name)\s+([a-zA-Z][a-zA-Z .'-]{0,50}?)(?:\s+hai\b|\s+h\b|,|\.|$)/i
+    );
 
 
             if (nameMatch) {
